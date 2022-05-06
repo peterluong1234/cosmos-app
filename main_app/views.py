@@ -229,6 +229,24 @@ class PartyUpdate(LoginRequiredMixin, UpdateView):
   model = ViewingParty
   fields = ['name', 'party_location', 'start_date', 'start_time', 'end_date', 'end_time', 'description']
 
+def add_party_photo(request):
+  photo_file = request.FILES.get('photo-file', None)
+  if photo_file:
+    s3 = boto3.client('s3')
+    key = uuid.uuid4().hex[:6] + photo_file.name[photo_file.name.rfind('.'):]
+
+    try:
+        print(request)
+        # s3.upload_fileobj(photo_file, BUCKET, key)
+        # url = f"{S3_BASE_URL}{BUCKET}/{key}"
+        # user = request.user
+        # party = request
+        # Photo.objects.create(url=url)
+        
+    except:
+        print('An error occurred uploading file to S3')
+    return redirect('users_update')
+
 def add_profile_photo (request):
   photo_file = request.FILES.get('photo-file', None)
   if photo_file:
