@@ -235,7 +235,6 @@ class PartyUpdate(LoginRequiredMixin, UpdateView):
     try:
       party = ViewingParty.objects.get(id=self.get_object().id)
       photo = Photo.objects.get(party=party)
-      print(photo)
       context['photo'] = photo.url
     except:
       context['photo'] = False
@@ -249,7 +248,6 @@ def add_party_photo(request, viewingparty_id):
 
     try:
         party = ViewingParty.objects.get(id=viewingparty_id)
-        print(party)
         s3.upload_fileobj(photo_file, BUCKET, key)
         url = f"{S3_BASE_URL}{BUCKET}/{key}"
         
@@ -260,6 +258,12 @@ def add_party_photo(request, viewingparty_id):
     except:
         print('Error trying to add party photo')
     return HttpResponseRedirect(next)
+
+def delete_party_photo (request, viewingparty_id):
+
+  party = ViewingParty.objects.get(id=viewingparty_id)
+  party.photo.delete()
+  return redirect('parties_list')
 
 def add_profile_photo (request):
   photo_file = request.FILES.get('photo-file', None)
