@@ -19,6 +19,10 @@
 	</form>
 	{% else %}
 	<img src="{{ viewingparty.photo.url }}" class="responsive-img">
+	<form action="{% url 'parties_delete_photo' %}" method="POST">
+		{% csrf_token %}
+	<input type="submit" class="btn" value="Delete Photo">
+	</form>
 	{% endif %}
 
 	<div class="row">

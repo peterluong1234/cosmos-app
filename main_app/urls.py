@@ -25,7 +25,7 @@ urlpatterns = [
     path('parties/<int:viewingparty_id>/add_attendee/', views.add_attendee, name='parties_add_attendee'),
     path('parties/<int:viewingparty_id>/remove_attendee/', views.remove_attendee, name='parties_remove_attendee'),
     path('parties/<int:viewingparty_id>/add_party_photo/', views.add_party_photo, name='parties_add_photo'),
-    # path('parties/<int:viewingparty_id>/delete_party_photo/', views.remove_attendee, name='parties_remove_attendee'),
+    path('parties/<int:viewingparty_id>/delete_party_photo/', views.delete_party_photo, name='parties_delete_photo'),
  
     # path('events/<int:pk>/update/', views.EventUpdate.as_view(), name='events_update'),
 ]
