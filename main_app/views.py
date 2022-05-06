@@ -26,7 +26,6 @@ S3_BASE_URL = 'https://s3-us-west-1.amazonaws.com/'
 BUCKET = 'cosmos-app'
 NASA_API = str(os.getenv('NASA_API'))
 MAPBOX_API = str(os.getenv('MAPBOX_API'))
-# Create your views here.
 
 def home(request):
     data = requests.get(f'https://api.nasa.gov/planetary/apod?api_key={NASA_API}').text
@@ -39,18 +38,13 @@ def home(request):
 def signup(request):
   error_message = ''
   if request.method == 'POST':
-    # This is how to create a 'user' form object
-    # that includes the data from the browser
     form = UserCreationForm(request.POST)
     if form.is_valid():
-      # This will add the user to the database
       user = form.save()
-      # This is how we log a user in via code
       login(request, user)
       return redirect('home')
     else:
       error_message = 'Invalid sign up - try again'
-  # A bad POST or a GET request, so render signup.html with an empty form
   form = UserCreationForm()
   context = {'form': form, 'error_message': error_message}
   return render(request, 'registration/signup.html', context)
@@ -74,7 +68,6 @@ def profile(request):
 
         try:
           photo = Photo.objects.get(profile=profile.id)
-
           return render(request, 'profile.html', {'user_form': user_form, 'profile_form': profile_form, 'photo_url': photo.url, 'photo': photo, 'profile': profile})
         except:
           return render(request, 'profile.html', {'user_form': user_form, 'profile_form': profile_form, 'photo': False})
@@ -116,9 +109,7 @@ def user_unfollow(request, user_id):
   follower = User.objects.get(id=request.user.id)
   user = User.objects.get(id=user_id)
   profile = Profile.objects.get(user=user_id)
-  print(follower, 'new function')
-  print(user, 'new function')
-  print(profile, 'new function')
+
   try:
     profile.followers.remove(follower)
     next = request.POST.get('next', '/')
@@ -250,14 +241,12 @@ def add_party_photo(request, viewingparty_id):
         party = ViewingParty.objects.get(id=viewingparty_id)
         s3.upload_fileobj(photo_file, BUCKET, key)
         url = f"{S3_BASE_URL}{BUCKET}/{key}"
-        
         photo = Photo.objects.create(url=url)
         party.photo = photo
         party.photo.save()
-        next = request.POST.get('next', '/')
     except:
         print('Error trying to add party photo')
-    return HttpResponseRedirect(next)
+    return ('parties_list')
 
 def delete_party_photo (request, viewingparty_id):
 
@@ -274,7 +263,6 @@ def add_profile_photo (request):
     try:
         s3.upload_fileobj(photo_file, BUCKET, key)
         url = f"{S3_BASE_URL}{BUCKET}/{key}"
-        # user = request.user
         profile = request.user.profile
         Photo.objects.create(url=url, profile=profile)
         
