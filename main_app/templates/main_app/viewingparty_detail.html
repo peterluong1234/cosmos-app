@@ -4,8 +4,8 @@
 <div class="container">
 
     <h1>{{ viewingparty.name }} </h1>
-    {% if photo != False %}
-        <img src="{{viewingparty.photo.url}}">
+    {% if viewingparty.photo.url %}
+        <img src="{{viewingparty.photo.url}}" class="responsive-img">
     {% endif %}
     {% if user.is_authenticated %}
     {% if user in viewingparty.attendees.all %}
@@ -27,14 +27,14 @@
     <p>Start Date/Time: {{ viewingparty.start_date }} / {{ viewingparty.start_time }} </p>
     <p>End Date/Time: {{ viewingparty.end_date }} / {{ viewingparty.end_time }} </p>
     <p>Attendees: {{ viewingparty.attendees.all|length }}</p>
-    <p>Created By: {{ viewingparty.user }}</p>
+    <p>Created By: {{ viewingparty.user }} 
+        {% if user == viewingparty.user %}
+            <a href="{% url 'parties_update' viewingparty.id %}">Edit</a>
+        {% endif %}
+    </p>
 
     <!-- add edit button below -->
-    {% if user == viewingparty.user %}
-    <div class="card-action">
-        <a href="{% url 'parties_update' viewingparty.id %}">Edit</a>
-    </div>
-    {% endif %}
+
 
 </div>
 

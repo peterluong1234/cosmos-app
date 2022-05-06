@@ -10,18 +10,20 @@
 			<h1>Create Viewing Party</h1>
 		{% endif %}
 	</div>
-	{% if photo == False %}
+	{% if viewingparty.photo.url %}
+
+	<img src="{{ viewingparty.photo.url }}" class="responsive-img">
+	<form action="{% url 'parties_delete_photo' viewingparty.id %}" method="POST">
+		{% csrf_token %}
+	<input type="submit" class="btn" value="Delete Photo">
+	</form>
+
+	{% else %}
 	<form action="{% url 'parties_add_photo' viewingparty.id %}" enctype="multipart/form-data" method="POST" class="card-panel">
 		{% csrf_token %}
 		<input type="file" name="photo-file">
 		<br><br>
 		<input type="submit" class="btn" value="Upload Party Photo">
-	</form>
-	{% else %}
-	<img src="{{ viewingparty.photo.url }}" class="responsive-img">
-	<form action="{% url 'parties_delete_photo' viewingparty.id %}" method="POST">
-		{% csrf_token %}
-	<input type="submit" class="btn" value="Delete Photo">
 	</form>
 	{% endif %}
 
