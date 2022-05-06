@@ -4,6 +4,9 @@
 <div class="container">
 
     <h1>{{ viewingparty.name }} </h1>
+    {% if photo != False %}
+        <img src="{{viewingparty.photo.url}}">
+    {% endif %}
     {% if user.is_authenticated %}
     {% if user in viewingparty.attendees.all %}
     <form method="post" action="{% url 'parties_remove_attendee' viewingparty.id %}">

@@ -204,6 +204,16 @@ class PartyDetail(DetailView):
   model = ViewingParty
   fields = '__all__'
 
+  def get_context_data(self, **kwargs):
+    context = super(PartyDetail, self).get_context_data(**kwargs)
+    try:
+      party = ViewingParty.objects.get(id=self.get_object().id)
+      photo = Photo.objects.get(party=party)
+      context['photo'] = photo.url
+    except:
+      context['photo'] = False
+    return context
+
 class PartyCreate(LoginRequiredMixin, CreateView):
   model = ViewingParty
   fields = ['name', 'party_location', 'start_date', 'start_time', 'end_date', 'end_time', 'description', 'event']
