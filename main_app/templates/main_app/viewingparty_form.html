@@ -10,6 +10,13 @@
 			<h1>Create Viewing Party</h1>
 		{% endif %}
 	</div>
+	<form action="{% url 'parties_add_photo' viewingparty.id %}" enctype="multipart/form-data" method="POST" class="card-panel">
+		{% csrf_token %}
+		<input type="file" name="photo-file">
+		<br><br>
+		<input type="submit" class="btn" value="Upload Party Photo">
+	</form>
+
 	<div class="row">
 		<form action="" method="POST">
 			{% csrf_token %}
