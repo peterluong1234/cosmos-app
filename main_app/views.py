@@ -230,6 +230,17 @@ class PartyUpdate(LoginRequiredMixin, UpdateView):
   model = ViewingParty
   fields = ['name', 'party_location', 'start_date', 'start_time', 'end_date', 'end_time', 'description']
 
+  def get_context_data(self, **kwargs):
+    context = super(PartyUpdate, self).get_context_data(**kwargs)
+    try:
+      party = ViewingParty.objects.get(id=self.get_object().id)
+      photo = Photo.objects.get(party=party)
+      print(photo)
+      context['photo'] = photo.url
+    except:
+      context['photo'] = False
+    return context
+
 def add_party_photo(request, viewingparty_id):
   photo_file = request.FILES.get('photo-file', None)
   if photo_file:
